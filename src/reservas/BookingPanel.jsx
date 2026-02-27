@@ -170,9 +170,12 @@ function BookingPanel({ open, onClose, onCreated }) {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <TextField
-                      label="Telefono"
+                      label="WhatsApp"
+                      type="tel"
                       value={form.clienteTelefono}
                       onChange={(event) => setValue("clienteTelefono", event.target.value)}
+                      placeholder="Ej: 3001234567"
+                      helperText="Te contactaremos por WhatsApp para confirmar."
                       fullWidth
                       required
                     />

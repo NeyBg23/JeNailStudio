@@ -105,10 +105,6 @@ function App() {
           <Servicios />
         </Box>
 
-        <Box id="testimonios">
-          <Testimonios />
-        </Box>
-
         <Container id="reservar" maxWidth="lg" sx={{ py: 6 }}>
           <Paper className="booking-banner" sx={{ p: { xs: 2, md: 4 }, borderRadius: 4 }}>
             <Typography variant="h4" sx={{ color: "#6D6875", fontWeight: 700 }}>
@@ -133,6 +129,10 @@ function App() {
 
           <ReservasListCliente key={refreshKey} />
         </Container>
+
+        <Box id="testimonios">
+          <Testimonios />
+        </Box>
 
         <Footer />
       </div>
