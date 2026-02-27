@@ -1,92 +1,151 @@
-// src/reservas/ReservasForm.jsx
 import { useState } from "react";
 import { db } from "../firebaseConfig";
-import { collection, addDoc } from "firebase/firestore";
-import { TextField, Button, Snackbar, Alert } from "@mui/material";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { TextField, Button, Snackbar, Alert, Paper, Typography, Grid } from "@mui/material";
 
 function ReservasForm() {
-  const [clienteNombre, setClienteNombre] = useState("");
-  const [tipoUña, setTipoUña] = useState("");
-  const [fecha, setFecha] = useState("");
-  const [precioTotal, setPrecioTotal] = useState(0);
+  const [form, setForm] = useState({
+    clienteNombre: "",
+    clienteTelefono: "",
+    direccion: "",
+    tipoUna: "",
+    modeloSeleccionado: "",
+    fechaHora: "",
+    precioTotal: "",
+  });
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const setValue = (key, value) => setForm((prev) => ({ ...prev, [key]: value }));
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
     try {
       await addDoc(collection(db, "reservas"), {
-        clienteNombre,
-        tipoUña,
-        fecha,
-        precioTotal,
-        estado: "Agendado"
+        clienteNombre: form.clienteNombre.trim(),
+        clienteTelefono: form.clienteTelefono.trim(),
+        direccion: form.direccion.trim(),
+        tipoUna: form.tipoUna.trim(),
+        modeloSeleccionado: form.modeloSeleccionado.trim(),
+        fechaHora: form.fechaHora ? Timestamp.fromDate(new Date(form.fechaHora)) : Timestamp.now(),
+        precioTotal: Number(form.precioTotal) || 0,
+        estado: "Agendado",
       });
-      setOpenSnackbar(true); // mostrar confirmación
-      setClienteNombre("");
-      setTipoUña("");
-      setFecha("");
-      setPrecioTotal(0);
+
+      setOpenSnackbar(true);
+      setForm({
+        clienteNombre: "",
+        clienteTelefono: "",
+        direccion: "",
+        tipoUna: "",
+        modeloSeleccionado: "",
+        fechaHora: "",
+        precioTotal: "",
+      });
     } catch (err) {
       console.error("Error al agendar reserva:", err);
     }
   };
 
   return (
-    <div style={{ marginTop: "20px" }}>
+    <Paper sx={{ mt: 4, p: 3, borderRadius: 3 }}>
+      <Typography variant="h5" sx={{ color: "#6D6875", mb: 2, fontWeight: 700 }}>
+        Agenda tu cita
+      </Typography>
+
       <form onSubmit={handleSubmit}>
-        <TextField
-          label="Nombre del Cliente"
-          value={clienteNombre}
-          onChange={(e) => setClienteNombre(e.target.value)}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Tipo de Uña"
-          value={tipoUña}
-          onChange={(e) => setTipoUña(e.target.value)}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Fecha"
-          type="date"
-          value={fecha}
-          onChange={(e) => setFecha(e.target.value)}
-          fullWidth
-          margin="normal"
-          InputLabelProps={{ shrink: true }}
-        />
-        <TextField
-          label="Precio Total"
-          type="number"
-          value={precioTotal}
-          onChange={(e) => setPrecioTotal(Number(e.target.value))}
-          fullWidth
-          margin="normal"
-        />
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6}>
+            <TextField
+              label="Nombre"
+              value={form.clienteNombre}
+              onChange={(event) => setValue("clienteNombre", event.target.value)}
+              fullWidth
+              required
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField
+              label="Telefono"
+              value={form.clienteTelefono}
+              onChange={(event) => setValue("clienteTelefono", event.target.value)}
+              fullWidth
+              required
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="Direccion"
+              value={form.direccion}
+              onChange={(event) => setValue("direccion", event.target.value)}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <TextField
+              label="Tipo de una"
+              value={form.tipoUna}
+              onChange={(event) => setValue("tipoUna", event.target.value)}
+              fullWidth
+              required
+            />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <TextField
+              label="Modelo"
+              value={form.modeloSeleccionado}
+              onChange={(event) => setValue("modeloSeleccionado", event.target.value)}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <TextField
+              label="Precio total"
+              type="number"
+              value={form.precioTotal}
+              onChange={(event) => setValue("precioTotal", event.target.value)}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="Fecha y hora"
+              type="datetime-local"
+              value={form.fechaHora}
+              onChange={(event) => setValue("fechaHora", event.target.value)}
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              required
+            />
+          </Grid>
+        </Grid>
+
         <Button
           type="submit"
           variant="contained"
-          color="secondary"
-          style={{ marginTop: "10px" }}
+          sx={{
+            mt: 2,
+            borderRadius: 999,
+            px: 4,
+            backgroundColor: "#B5838D",
+            "&:hover": { backgroundColor: "#6D6875" },
+          }}
         >
-          Agendar Reserva
+          Confirmar reserva
         </Button>
       </form>
 
-      {/* Snackbar de confirmación */}
       <Snackbar
         open={openSnackbar}
-        autoHideDuration={4000}
+        autoHideDuration={3500}
         onClose={() => setOpenSnackbar(false)}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert severity="success" sx={{ width: "100%" }}>
-          🎉 Tu cita fue agendada con éxito
+          Tu cita fue agendada con exito.
         </Alert>
       </Snackbar>
-    </div>
+    </Paper>
   );
 }
 

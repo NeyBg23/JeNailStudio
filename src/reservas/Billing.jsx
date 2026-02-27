@@ -1,165 +1,210 @@
-// src/reservas/Billing.jsx
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { db } from "../firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 import {
-  Card, CardContent, Typography, Grid, Select, MenuItem, FormControl, InputLabel,
-  Table, TableHead, TableBody, TableRow, TableCell, Paper
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Paper,
+  Box,
+  Chip,
 } from "@mui/material";
-import { Bar, Pie, Line } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  BarElement,
-  ArcElement,
   LineElement,
   PointElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 } from "chart.js";
 
-ChartJS.register(
-  CategoryScale, LinearScale, BarElement, ArcElement,
-  LineElement, PointElement, Title, Tooltip, Legend
-);
+ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend);
+
+const toDate = (value) => {
+  if (!value) return null;
+  if (value?.toDate) return value.toDate();
+  if (value?.seconds) return new Date(value.seconds * 1000);
+  if (typeof value === "string" || typeof value === "number") return new Date(value);
+  return null;
+};
 
 function Billing() {
   const [reservas, setReservas] = useState([]);
-  const [totalIngresos, setTotalIngresos] = useState(0);
-  const [totalReservas, setTotalReservas] = useState(0);
   const [filter, setFilter] = useState("mes");
 
   useEffect(() => {
     const fetchReservas = async () => {
-      const querySnapshot = await getDocs(collection(db, "reservas"));
-      const reservasData = querySnapshot.docs.map(doc => doc.data());
-      setReservas(reservasData);
-      calcularMétricas(reservasData, filter);
+      const snapshot = await getDocs(collection(db, "reservas"));
+      const data = snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+      setReservas(data);
     };
     fetchReservas();
-  }, [filter]);
+  }, []);
 
-  const calcularMétricas = (data, filtro) => {
+  const filtradas = useMemo(() => {
     const now = new Date();
-    let filtered = data;
+    return reservas.filter((r) => {
+      const fecha = toDate(r.fechaHora || r.fecha);
+      if (!fecha) return false;
 
-    if (filtro === "mes") {
-      filtered = data.filter(r => new Date(r.fecha).getMonth() === now.getMonth());
-    } else if (filtro === "semana") {
-      const start = new Date(now.setDate(now.getDate() - 7));
-      filtered = data.filter(r => new Date(r.fecha) >= start);
-    } else if (filtro === "dia") {
-      filtered = data.filter(r => new Date(r.fecha).toDateString() === now.toDateString());
-    }
+      if (filter === "dia") {
+        return fecha.toDateString() === now.toDateString();
+      }
+      if (filter === "semana") {
+        const inicio = new Date(now);
+        inicio.setDate(now.getDate() - 7);
+        return fecha >= inicio;
+      }
+      return fecha.getMonth() === now.getMonth() && fecha.getFullYear() === now.getFullYear();
+    });
+  }, [reservas, filter]);
 
-    const ingresos = filtered.reduce((acc, r) => acc + r.precioTotal, 0);
-    setTotalIngresos(ingresos);
-    setTotalReservas(filtered.length);
-  };
+  const totalIngresos = filtradas.reduce((acc, r) => acc + Number(r.precioTotal || 0), 0);
+  const totalReservas = filtradas.length;
 
-  // Fidelización: clientes con más de 10 reservas
-  const clientesFieles = reservas.reduce((acc, r) => {
-    acc[r.clienteNombre] = (acc[r.clienteNombre] || 0) + 1;
-    return acc;
-  }, {});
+  const ingresosPorFecha = useMemo(() => {
+    const map = {};
+    filtradas.forEach((r) => {
+      const key = toDate(r.fechaHora || r.fecha)?.toLocaleDateString() || "Sin fecha";
+      map[key] = (map[key] || 0) + Number(r.precioTotal || 0);
+    });
+    return map;
+  }, [filtradas]);
 
-  const clientesConDescuento = Object.entries(clientesFieles)
-    .filter(([_, count]) => count >= 10)
-    .map(([nombre]) => nombre);
-
-  // Gráfica de línea: ingresos por fecha
-  const ingresosPorFecha = reservas.reduce((acc, r) => {
-    const fecha = new Date(r.fecha).toLocaleDateString();
-    acc[fecha] = (acc[fecha] || 0) + r.precioTotal;
-    return acc;
-  }, {});
+  const clientesFrecuentes = useMemo(() => {
+    const counter = {};
+    reservas.forEach((r) => {
+      const key = r.clienteTelefono || r.clienteNombre || "Cliente";
+      counter[key] = (counter[key] || 0) + 1;
+    });
+    return counter;
+  }, [reservas]);
 
   const lineData = {
     labels: Object.keys(ingresosPorFecha),
     datasets: [
       {
-        label: "Ingresos por fecha",
+        label: "Ingresos",
         data: Object.values(ingresosPorFecha),
         borderColor: "#B5838D",
-        backgroundColor: "#FFC8DD",
-        tension: 0.3,
+        backgroundColor: "rgba(181,131,141,0.2)",
         fill: true,
-        pointRadius: 5,
-        pointBackgroundColor: "#6D6875"
-      }
-    ]
+        tension: 0.35,
+      },
+    ],
   };
 
   return (
-    <Grid container spacing={2} style={{ marginTop: "20px" }}>
-      {/* Filtros */}
-      <Grid item xs={12}>
-        <FormControl style={{ minWidth: 150 }}>
-          <InputLabel>Filtro</InputLabel>
-          <Select value={filter} onChange={(e) => setFilter(e.target.value)}>
-            <MenuItem value="mes">Este mes</MenuItem>
-            <MenuItem value="semana">Última semana</MenuItem>
-            <MenuItem value="dia">Hoy</MenuItem>
-          </Select>
-        </FormControl>
-      </Grid>
+    <Box sx={{ mt: 3 }}>
+      <Box
+        sx={{
+          p: 2,
+          borderRadius: 3,
+          background: "linear-gradient(120deg, #fff0f5 0%, #fde2e4 100%)",
+          mb: 2,
+        }}
+      >
+        <Typography variant="h6" sx={{ color: "#6D6875", fontWeight: 700 }}>
+          Billing y analitica
+        </Typography>
+        <Typography variant="body2">Resumen financiero del periodo seleccionado.</Typography>
+      </Box>
 
-      {/* Cards métricas */}
-      <Grid item xs={6}>
-        <Card style={{ backgroundColor: "#FFF0F5", boxShadow: "0 4px 10px rgba(0,0,0,0.1)" }}>
-          <CardContent>
-            <Typography variant="h5">Ingresos Totales</Typography>
-            <Typography variant="h4">${totalIngresos}</Typography>
-          </CardContent>
-        </Card>
-      </Grid>
-      <Grid item xs={6}>
-        <Card style={{ backgroundColor: "#FDE2E4", boxShadow: "0 4px 10px rgba(0,0,0,0.1)" }}>
-          <CardContent>
-            <Typography variant="h5">Reservas Totales</Typography>
-            <Typography variant="h4">{totalReservas}</Typography>
-          </CardContent>
-        </Card>
-      </Grid>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <FormControl sx={{ minWidth: 180 }}>
+            <InputLabel>Periodo</InputLabel>
+            <Select value={filter} label="Periodo" onChange={(event) => setFilter(event.target.value)}>
+              <MenuItem value="mes">Este mes</MenuItem>
+              <MenuItem value="semana">Ultima semana</MenuItem>
+              <MenuItem value="dia">Hoy</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
 
-      {/* Gráficas */}
-      <Grid item xs={12}>
-        <Card><CardContent><Line data={lineData} /></CardContent></Card>
-      </Grid>
+        <Grid item xs={12} md={6}>
+          <Card sx={{ borderRadius: 3, backgroundColor: "#FFF0F5" }}>
+            <CardContent>
+              <Typography variant="subtitle1">Ingresos</Typography>
+              <Typography variant="h4">${totalIngresos.toLocaleString()}</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
 
-      {/* Historial de clientes */}
-      <Grid item xs={12}>
-        <Paper style={{ marginTop: "20px", padding: "10px" }}>
-          <Typography variant="h6">Historial de Clientes</Typography>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Cliente</TableCell>
-                <TableCell>Fecha</TableCell>
-                <TableCell>Estado</TableCell>
-                <TableCell>Precio</TableCell>
-                <TableCell>Descuento</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {reservas.map((r, index) => (
-                <TableRow key={index}>
-                  <TableCell>{r.clienteNombre}</TableCell>
-                  <TableCell>{new Date(r.fecha).toLocaleDateString()}</TableCell>
-                  <TableCell>{r.estado}</TableCell>
-                  <TableCell>${r.precioTotal}</TableCell>
-                  <TableCell>
-                    {clientesConDescuento.includes(r.clienteNombre) ? "50%" : "-"}
-                  </TableCell>
+        <Grid item xs={12} md={6}>
+          <Card sx={{ borderRadius: 3, backgroundColor: "#FDE2E4" }}>
+            <CardContent>
+              <Typography variant="subtitle1">Reservas</Typography>
+              <Typography variant="h4">{totalReservas}</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Card sx={{ borderRadius: 3 }}>
+            <CardContent>
+              <Line data={lineData} />
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Paper sx={{ p: 2, borderRadius: 3 }}>
+            <Typography variant="h6" sx={{ mb: 1 }}>
+              Historial de servicios
+            </Typography>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Cliente</TableCell>
+                  <TableCell>Servicio</TableCell>
+                  <TableCell>Fecha</TableCell>
+                  <TableCell>Estado</TableCell>
+                  <TableCell>Precio</TableCell>
+                  <TableCell>Fidelizacion</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Paper>
+              </TableHead>
+              <TableBody>
+                {filtradas.map((r) => {
+                  const key = r.clienteTelefono || r.clienteNombre || "Cliente";
+                  const servicios = clientesFrecuentes[key] || 0;
+                  const vip = servicios >= 10;
+                  return (
+                    <TableRow key={r.id}>
+                      <TableCell>{r.clienteNombre || "-"}</TableCell>
+                      <TableCell>{r.tipoUna || r.tipoUña || "-"}</TableCell>
+                      <TableCell>{toDate(r.fechaHora || r.fecha)?.toLocaleString() || "-"}</TableCell>
+                      <TableCell>{r.estado || "-"}</TableCell>
+                      <TableCell>${Number(r.precioTotal || 0).toLocaleString()}</TableCell>
+                      <TableCell>
+                        {vip ? (
+                          <Chip label="VIP 50%" size="small" sx={{ backgroundColor: "#ffd6a5" }} />
+                        ) : (
+                          "-"
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </Paper>
+        </Grid>
       </Grid>
-    </Grid>
+    </Box>
   );
 }
 

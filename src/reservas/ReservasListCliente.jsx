@@ -1,61 +1,105 @@
-// src/reservas/ReservasListCliente.jsx
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { db } from "../firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
-import { Card, CardContent, Typography, Grid, LinearProgress } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  LinearProgress,
+  Paper,
+  TextField,
+  Chip,
+} from "@mui/material";
+
+const toDate = (value) => {
+  if (!value) return null;
+  if (value?.toDate) return value.toDate();
+  if (typeof value === "string" || typeof value === "number") return new Date(value);
+  if (value?.seconds) return new Date(value.seconds * 1000);
+  return null;
+};
 
 function ReservasListCliente() {
   const [reservas, setReservas] = useState([]);
+  const [telefonoFiltro, setTelefonoFiltro] = useState("");
 
   useEffect(() => {
     const fetchReservas = async () => {
-      const querySnapshot = await getDocs(collection(db, "reservas"));
-      const reservasData = querySnapshot.docs.map(doc => doc.data());
-      setReservas(reservasData);
+      const snapshot = await getDocs(collection(db, "reservas"));
+      const data = snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+      setReservas(data);
     };
     fetchReservas();
   }, []);
 
-  // Cliente actual (luego lo conectamos con login real)
-  const clienteNombre = "Cliente Demo";
-  const reservasCliente = reservas.filter(r => r.clienteNombre === clienteNombre);
+  const reservasCliente = useMemo(() => {
+    if (!telefonoFiltro.trim()) return [];
+    return reservas
+      .filter((r) => (r.clienteTelefono || "").includes(telefonoFiltro.trim()))
+      .sort((a, b) => (toDate(b.fechaHora) || 0) - (toDate(a.fechaHora) || 0));
+  }, [reservas, telefonoFiltro]);
 
-  // Fidelización: progreso hacia 10 servicios
   const totalServicios = reservasCliente.length;
   const progreso = Math.min((totalServicios / 10) * 100, 100);
-  const descuento = totalServicios >= 10 ? "¡Tienes 50% de descuento en tu próximo servicio!" : `Te faltan ${10 - totalServicios} servicios para tu descuento`;
+  const descuento =
+    totalServicios >= 10
+      ? "Cliente VIP: 50% en tu proximo servicio."
+      : `Te faltan ${10 - totalServicios} servicios para tu beneficio VIP.`;
 
   return (
-    <div style={{ marginTop: "20px" }}>
-      <Typography variant="h5">Tus Reservas</Typography>
+    <Paper sx={{ mt: 4, p: 3, borderRadius: 3 }}>
+      <Typography variant="h5" sx={{ mb: 2, color: "#6D6875", fontWeight: 700 }}>
+        Consulta tus reservas
+      </Typography>
+
+      <TextField
+        label="Busca por telefono"
+        value={telefonoFiltro}
+        onChange={(event) => setTelefonoFiltro(event.target.value)}
+        fullWidth
+        sx={{ mb: 2 }}
+      />
+
       <Grid container spacing={2}>
-        {reservasCliente.map((r, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <Card style={{ backgroundColor: "#FAE3D9", boxShadow: "0 4px 10px rgba(0,0,0,0.1)" }}>
+        {reservasCliente.map((r) => (
+          <Grid item xs={12} md={6} key={r.id}>
+            <Card sx={{ backgroundColor: "#FAE3D9" }}>
               <CardContent>
-                <Typography variant="h6">{r.tipoUña}</Typography>
-                <Typography>Fecha: {new Date(r.fecha).toLocaleDateString()}</Typography>
-                <Typography>Estado: {r.estado}</Typography>
-                <Typography>Precio: ${r.precioTotal}</Typography>
+                <Typography variant="h6">{r.tipoUna || "Servicio"}</Typography>
+                <Typography>Modelo: {r.modeloSeleccionado || "Sin modelo"}</Typography>
+                <Typography>Fecha: {toDate(r.fechaHora)?.toLocaleString() || "Pendiente"}</Typography>
+                <Typography>Estado: {r.estado || "Agendado"}</Typography>
+                <Typography>Precio: ${Number(r.precioTotal || 0).toLocaleString()}</Typography>
               </CardContent>
             </Card>
           </Grid>
         ))}
       </Grid>
 
-      {/* Fidelización */}
-      <div style={{ marginTop: "30px" }}>
-        <Typography variant="h6">Programa de Fidelización</Typography>
-        <LinearProgress
-          variant="determinate"
-          value={progreso}
-          style={{ height: "10px", borderRadius: "5px", marginTop: "10px", backgroundColor: "#FDE2E4" }}
-        />
-        <Typography style={{ marginTop: "10px", fontWeight: "bold", color: "#6D6875" }}>
-          {descuento}
-        </Typography>
-      </div>
-    </div>
+      {!!telefonoFiltro && reservasCliente.length === 0 && (
+        <Typography sx={{ mt: 2 }}>No encontramos reservas con ese telefono.</Typography>
+      )}
+
+      <Typography variant="h6" sx={{ mt: 3 }}>
+        Fidelizacion
+      </Typography>
+      <LinearProgress
+        variant="determinate"
+        value={progreso}
+        sx={{
+          mt: 1,
+          height: 10,
+          borderRadius: 5,
+          backgroundColor: "#FDE2E4",
+          "& .MuiLinearProgress-bar": { backgroundColor: "#B5838D" },
+        }}
+      />
+      <Chip
+        label={descuento}
+        sx={{ mt: 1.5, backgroundColor: "#FFF0F5", color: "#6D6875", fontWeight: 700 }}
+      />
+    </Paper>
   );
 }
 
