@@ -1,5 +1,4 @@
 // src/admin/LogoutAdmin.jsx
-/** 
 import { signOut } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 
@@ -21,5 +20,3 @@ function LogoutAdmin({ onLogout }) {
 }
 
 export default LogoutAdmin;
-
-*/

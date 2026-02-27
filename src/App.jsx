@@ -10,7 +10,7 @@ import ReservasListAdmin from './reservas/ReservasListAdmin';
 import Billing from './reservas/Billing';
 import LoginAdmin from './admin/LoginAdmin';
 import LogoutAdmin from './admin/LogoutAdmin';
-import Testimonios from './components/Testimonios';
+import Testimonios from './components/Testimonio';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Servicios from './components/Servicios'; // nuevo componente
