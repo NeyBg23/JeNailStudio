@@ -1,9 +1,11 @@
 import { Box, Typography, Link, Button, Container, Divider } from "@mui/material";
+import "./Footer.css";
 
 function Footer() {
   return (
     <Box
       component="footer"
+      className="footer-premium"
       sx={{
         mt: 6,
         background:
@@ -29,6 +31,7 @@ function Footer() {
               Elegancia, detalle y estilo en cada cita. Agenda facil y confirma tu servicio por WhatsApp.
             </Typography>
             <Button
+              className="footer-whatsapp-btn"
               component="a"
               href="https://wa.me/573045538465"
               target="_blank"
