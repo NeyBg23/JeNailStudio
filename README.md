@@ -1,16 +1,32 @@
-# React + Vite
+# JenNailStudio 💅✨
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+JenNailStudio es una plataforma digital premium para agendamiento de servicios de uñas a domicilio.  
+El proyecto busca ofrecer una experiencia **intuitiva, elegante y motivadora** tanto para clientes como para administradores.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Características principales
 
-## React Compiler
+- **Navbar premium** con scroll spy y efecto shrink dinámico.
+- **Hero Section** impactante con llamada a la acción.
+- **Servicios destacados** con cards elegantes (imagen, precio y botón de reservar).
+- **Testimonios reales** para transmitir confianza.
+- **Sistema de reservas** con roles diferenciados:
+  - Cliente: agendar citas, ver historial y facturación.
+  - Admin: gestionar reservas, ver clientes y administrar servicios.
+- **Footer profesional** con contacto, horarios y créditos del developer.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 📞 Contacto
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Teléfono: **304 553 8465**  
+- Horarios:  
+  - Lunes a Sábado: **8:00 am – 7:00 pm**  
+  - Domingos: **8:00 am – 2:00 pm**
+
+👨‍💻 Developer
+Desarrollado con ❤️ por NeyBg23
+
+📸 Preview
+(Agrega aquí capturas de pantalla de tu Hero Section, Navbar y Reservas para que el repositorio se vea más atractivo)
