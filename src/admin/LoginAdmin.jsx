@@ -1,25 +1,49 @@
-// src/admin/LogoutAdmin.jsx
-/** 
-import { signOut } from "firebase/auth";
+import { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 
-function LogoutAdmin({ onLogout }) {
-  const handleLogout = async () => {
+function LoginAdmin({ onLogin }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setError("");
+
     try {
-      await signOut(auth);
-      onLogout(); // notificamos a App.jsx que el admin salió
+      const credential = await signInWithEmailAndPassword(auth, email, password);
+      onLogin("admin", credential.user);
     } catch (err) {
-      console.error("Error al cerrar sesión:", err);
+      setError("No se pudo iniciar sesion. Verifica tus credenciales.");
+      console.error("Error al iniciar sesion:", err);
     }
   };
 
   return (
-    <button onClick={handleLogout} style={{ marginTop: "10px" }}>
-      Cerrar sesión
-    </button>
+    <form onSubmit={handleSubmit} style={{ marginTop: "20px" }}>
+      <h3>Acceso Admin</h3>
+      <input
+        type="email"
+        placeholder="Correo"
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+        required
+      />
+      <input
+        type="password"
+        placeholder="Contrasena"
+        value={password}
+        onChange={(event) => setPassword(event.target.value)}
+        required
+        style={{ marginLeft: "8px" }}
+      />
+      <button type="submit" style={{ marginLeft: "8px" }}>
+        Iniciar sesion
+      </button>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+    </form>
   );
 }
 
-export default LogoutAdmin;
-
-*/
+export default LoginAdmin;
