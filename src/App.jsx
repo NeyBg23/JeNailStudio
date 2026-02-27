@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import { Typography, Button, Box, Container, Paper } from "@mui/material";
 import theme from "./theme";
-import ReservasForm from "./reservas/ReservasForm";
 import ReservasListCliente from "./reservas/ReservasListCliente";
 import ReservasListAdmin from "./reservas/ReservasListAdmin";
 import Billing from "./reservas/Billing";
+import BookingPanel from "./reservas/BookingPanel";
 import LoginAdmin from "./admin/LoginAdmin";
 import LogoutAdmin from "./admin/LogoutAdmin";
 import Testimonios from "./components/Testimonio";
@@ -18,6 +18,8 @@ function App() {
   const [role, setRole] = useState("cliente");
   const [user, setUser] = useState(null);
   const [isAdminView, setIsAdminView] = useState(window.location.hash === "#admin");
+  const [bookingOpen, setBookingOpen] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     const onHashChange = () => setIsAdminView(window.location.hash === "#admin");
@@ -26,7 +28,7 @@ function App() {
   }, []);
 
   const handleLogin = (_, userData) => {
-    if (userData?.email === "JenNailStudio23@gmail.com") {
+    if ((userData?.email || "").toLowerCase() === "jennailstudio23@gmail.com") {
       setRole("admin");
       setUser(userData);
       return;
@@ -74,43 +76,29 @@ function App() {
       <div className="App">
         <Navbar />
 
-        <Box
-          id="inicio"
-          sx={{
-            backgroundImage: "url('/images/hero-nails.jpg')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            height: "80vh",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            color: "#fff",
-            textShadow: "0 2px 6px rgba(0,0,0,0.5)",
-          }}
-        >
-          <Typography variant="h2" sx={{ fontWeight: "bold", mb: 2 }}>
-            JenNailStudio
-          </Typography>
-          <Typography variant="h5" sx={{ mb: 4 }}>
-            Tu estilo, tu momento, tu espacio de belleza en casa
-          </Typography>
-          <Button
-            variant="contained"
-            color="secondary"
-            sx={{
-              fontSize: "1.2rem",
-              padding: "10px 30px",
-              borderRadius: "30px",
-              backgroundColor: "#B5838D",
-              "&:hover": { backgroundColor: "#6D6875" },
-            }}
-            onClick={() =>
-              document.getElementById("reservar").scrollIntoView({ behavior: "smooth" })
-            }
-          >
-            Agendar tu cita ahora
-          </Button>
+        <Box id="inicio" className="hero-shell">
+          <Box className="hero-overlay" />
+          <Box className="hero-content">
+            <Typography variant="h2" sx={{ fontWeight: "bold", mb: 2 }}>
+              JenNailStudio
+            </Typography>
+            <Typography variant="h5" sx={{ mb: 4 }}>
+              Tu estilo, tu momento, tu espacio de belleza en casa
+            </Typography>
+            <Button
+              variant="contained"
+              sx={{
+                fontSize: "1.1rem",
+                padding: "12px 32px",
+                borderRadius: "999px",
+                backgroundColor: "#B5838D",
+                "&:hover": { backgroundColor: "#6D6875" },
+              }}
+              onClick={() => setBookingOpen(true)}
+            >
+              Agendar tu cita
+            </Button>
+          </Box>
         </Box>
 
         <Box id="servicios">
@@ -121,13 +109,39 @@ function App() {
           <Testimonios />
         </Box>
 
-        <Box id="reservar" sx={{ px: 2 }}>
-          <ReservasForm />
-          <ReservasListCliente />
-        </Box>
+        <Container id="reservar" maxWidth="lg" sx={{ py: 6 }}>
+          <Paper className="booking-banner" sx={{ p: { xs: 2, md: 4 }, borderRadius: 4 }}>
+            <Typography variant="h4" sx={{ color: "#6D6875", fontWeight: 700 }}>
+              Reserva Express
+            </Typography>
+            <Typography sx={{ mt: 1, mb: 2 }}>
+              Agenda en menos de 1 minuto con un panel guiado y visual.
+            </Typography>
+            <Button
+              variant="contained"
+              sx={{
+                borderRadius: "999px",
+                px: 4,
+                backgroundColor: "#B5838D",
+                "&:hover": { backgroundColor: "#6D6875" },
+              }}
+              onClick={() => setBookingOpen(true)}
+            >
+              Abrir panel de reserva
+            </Button>
+          </Paper>
+
+          <ReservasListCliente key={refreshKey} />
+        </Container>
 
         <Footer />
       </div>
+
+      <BookingPanel
+        open={bookingOpen}
+        onClose={() => setBookingOpen(false)}
+        onCreated={() => setRefreshKey((prev) => prev + 1)}
+      />
     </ThemeProvider>
   );
 }

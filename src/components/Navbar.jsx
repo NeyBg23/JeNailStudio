@@ -1,48 +1,47 @@
-// src/components/Navbar.jsx
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 
 function Navbar() {
   return (
     <AppBar
-      position="fixed"
+      position="sticky"
       sx={{
-        backgroundColor: "rgba(255, 200, 221, 0.8)", // rosa elegante translúcido
-        backdropFilter: "blur(10px)", // efecto vidrio esmerilado
-        boxShadow: "0 4px 20px rgba(0,0,0,0.1)"
+        top: 0,
+        backgroundColor: "rgba(255, 240, 245, 0.8)",
+        backdropFilter: "blur(10px)",
+        borderBottom: "1px solid rgba(109,104,117,0.15)",
+        boxShadow: "0 6px 24px rgba(109,104,117,0.1)",
       }}
     >
-      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        {/* Logo centrado */}
+      <Toolbar sx={{ display: "flex", justifyContent: "space-between", gap: 1 }}>
         <Typography
-          variant="h5"
+          variant="h6"
           sx={{
-            fontWeight: "bold",
+            fontWeight: 800,
             color: "#6D6875",
-            flexGrow: 1,
-            textAlign: "center"
+            letterSpacing: "0.04em",
           }}
         >
           JenNailStudio
         </Typography>
 
-        {/* Menú */}
-        <Box sx={{ display: "flex", gap: 3 }}>
-          <Button sx={{ color: "#6D6875", "&:hover": { color: "#B5838D" } }}>
+        <Box sx={{ display: "flex", gap: { xs: 0.5, md: 1.2 }, flexWrap: "wrap", justifyContent: "flex-end" }}>
+          <Button sx={{ color: "#6D6875" }} href="#inicio">
             Inicio
           </Button>
-          <Button sx={{ color: "#6D6875", "&:hover": { color: "#B5838D" } }}>
+          <Button sx={{ color: "#6D6875" }} href="#servicios">
             Servicios
           </Button>
-          <Button sx={{ color: "#6D6875", "&:hover": { color: "#B5838D" } }}>
+          <Button sx={{ color: "#6D6875" }} href="#testimonios">
             Testimonios
           </Button>
           <Button
             variant="contained"
+            href="#reservar"
             sx={{
               backgroundColor: "#B5838D",
-              borderRadius: "30px",
-              padding: "5px 20px",
-              "&:hover": { backgroundColor: "#6D6875" }
+              borderRadius: "999px",
+              px: 2,
+              "&:hover": { backgroundColor: "#6D6875" },
             }}
           >
             Reservar
