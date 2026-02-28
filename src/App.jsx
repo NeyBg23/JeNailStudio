@@ -108,17 +108,22 @@ function App() {
         <Box id="inicio" className="hero-shell">
           <Box className="hero-overlay" />
           <Box className="hero-content">
-            <Typography variant="h2" sx={{ fontWeight: "bold", mb: 2 }}>
+            <Typography
+              variant="h2"
+              sx={{ fontWeight: "bold", mb: 2, fontSize: { xs: "2rem", sm: "2.6rem", md: "3.4rem" } }}
+            >
               JenNailStudio
             </Typography>
-            <Typography variant="h5" sx={{ mb: 4 }}>
+            <Typography variant="h5" sx={{ mb: 4, fontSize: { xs: "1rem", sm: "1.2rem", md: "1.5rem" } }}>
               Tu estilo, tu momento, tu espacio de belleza en casa
             </Typography>
             <Button
               variant="contained"
               sx={{
-                fontSize: "1.1rem",
-                padding: "12px 32px",
+                fontSize: { xs: "1rem", md: "1.05rem" },
+                padding: { xs: "11px 24px", md: "12px 32px" },
+                width: { xs: "100%", sm: "auto" },
+                maxWidth: 340,
                 borderRadius: "999px",
                 backgroundColor: "#B5838D",
                 "&:hover": { backgroundColor: "#6D6875" },
@@ -134,9 +139,9 @@ function App() {
           <ServiciosLanding />
         </Box>
 
-        <Container id="reservar" maxWidth="lg" sx={{ py: 6 }}>
+        <Container id="reservar" maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
           <Paper className="booking-banner" sx={{ p: { xs: 2, md: 4 }, borderRadius: 4 }}>
-            <Typography variant="h4" sx={{ color: "#6D6875", fontWeight: 700 }}>
+            <Typography variant="h4" sx={{ color: "#6D6875", fontWeight: 700, fontSize: { xs: "1.7rem", md: "2.125rem" } }}>
               Reserva Express
             </Typography>
             <Typography sx={{ mt: 1, mb: 2 }}>
@@ -147,6 +152,7 @@ function App() {
               sx={{
                 borderRadius: "999px",
                 px: 4,
+                width: { xs: "100%", sm: "auto" },
                 backgroundColor: "#B5838D",
                 "&:hover": { backgroundColor: "#6D6875" },
               }}

@@ -23,13 +23,21 @@ function ManicurePedicurePage({ onBook }) {
             panel premium.
           </Typography>
           <Box sx={{ mt: 2, display: "flex", gap: 1.2, flexWrap: "wrap" }}>
-            <Button variant="outlined" onClick={() => (window.location.hash = "#servicios")}>
+            <Button
+              variant="outlined"
+              onClick={() => (window.location.hash = "#servicios")}
+              sx={{ width: { xs: "100%", sm: "auto" } }}
+            >
               Volver a categorias
             </Button>
             <Button
               variant="contained"
               onClick={onBook}
-              sx={{ backgroundColor: "#B5838D", "&:hover": { backgroundColor: "#6D6875" } }}
+              sx={{
+                backgroundColor: "#B5838D",
+                width: { xs: "100%", sm: "auto" },
+                "&:hover": { backgroundColor: "#6D6875" },
+              }}
             >
               Agendar cita
             </Button>
@@ -52,8 +60,8 @@ function ManicurePedicurePage({ onBook }) {
                     component="img"
                     image={service.image}
                     alt={service.name}
-                    height="290"
                     sx={{
+                      height: { xs: 260, sm: 280, md: 290 },
                       transition: "transform 400ms ease",
                       ".MuiCard-root:hover &": { transform: "scale(1.06)" },
                     }}

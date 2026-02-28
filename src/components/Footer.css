@@ -53,3 +53,13 @@
     left: 160%;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-premium {
+    animation: none;
+  }
+
+  .footer-whatsapp-btn::after {
+    animation: none;
+  }
+}

@@ -13,6 +13,8 @@ import {
   Snackbar,
   TextField,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 
 const SERVICES = [
@@ -48,6 +50,8 @@ const panelStyles = {
 };
 
 function BookingPanel({ open, onClose, onCreated }) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [form, setForm] = useState({
     clienteNombre: "",
     clienteTelefono: "",
@@ -104,8 +108,15 @@ function BookingPanel({ open, onClose, onCreated }) {
 
   return (
     <>
-      <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
-        <DialogContent sx={panelStyles}>
+      <Dialog
+        open={open}
+        onClose={onClose}
+        fullWidth
+        maxWidth="md"
+        fullScreen={isMobile}
+        PaperProps={{ sx: { borderRadius: isMobile ? 0 : 2.5 } }}
+      >
+        <DialogContent sx={{ ...panelStyles, p: { xs: 2, md: 3 } }}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={5}>
               <Typography variant="h5" sx={{ fontWeight: 800, color: "#6D6875" }}>
@@ -234,7 +245,15 @@ function BookingPanel({ open, onClose, onCreated }) {
                   </Grid>
                 </Grid>
 
-                <Box sx={{ mt: 2, display: "flex", gap: 1.2, justifyContent: "flex-end" }}>
+                <Box
+                  sx={{
+                    mt: 2,
+                    display: "flex",
+                    gap: 1.2,
+                    justifyContent: "flex-end",
+                    flexDirection: { xs: "column-reverse", sm: "row" },
+                  }}
+                >
                   <Button onClick={onClose}>Cancelar</Button>
                   <Button
                     type="submit"
@@ -243,6 +262,7 @@ function BookingPanel({ open, onClose, onCreated }) {
                     sx={{
                       borderRadius: "999px",
                       px: 3,
+                      width: { xs: "100%", sm: "auto" },
                       backgroundColor: "#B5838D",
                       "&:hover": { backgroundColor: "#6D6875" },
                     }}

@@ -21,6 +21,7 @@ function Footer() {
             gridTemplateColumns: { xs: "1fr", md: "1.2fr 1fr 1fr" },
             gap: 3,
             alignItems: "start",
+            textAlign: { xs: "center", md: "left" },
           }}
         >
           <Box>
@@ -41,6 +42,7 @@ function Footer() {
                 mt: 2,
                 borderRadius: "999px",
                 px: 3,
+                width: { xs: "100%", sm: "auto" },
                 backgroundColor: "#FFD6A5",
                 color: "#4a4255",
                 fontWeight: 700,
@@ -72,6 +74,7 @@ function Footer() {
             justifyContent: "space-between",
             flexDirection: { xs: "column", md: "row" },
             gap: 1,
+            textAlign: { xs: "center", md: "left" },
           }}
         >
           <Typography variant="body2" sx={{ opacity: 0.85 }}>

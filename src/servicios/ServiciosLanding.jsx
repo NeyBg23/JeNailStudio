@@ -25,7 +25,12 @@ function ServiciosLanding() {
               }}
             >
               <Box sx={{ position: "relative" }}>
-                <CardMedia component="img" height="210" image={category.image} alt={category.title} />
+                <CardMedia
+                  component="img"
+                  image={category.image}
+                  alt={category.title}
+                  sx={{ height: { xs: 190, sm: 210, md: 220 } }}
+                />
                 <Box
                   sx={{
                     position: "absolute",
@@ -42,7 +47,7 @@ function ServiciosLanding() {
 
               <CardContent sx={{ display: "grid", gap: 1.2, flexGrow: 1 }}>
                 <Chip label={category.role} sx={{ width: "fit-content", backgroundColor: "#FFD6A5" }} />
-                <Typography variant="body2" sx={{ color: "#6D6875", minHeight: 70 }}>
+                <Typography variant="body2" sx={{ color: "#6D6875", minHeight: { xs: "auto", md: 70 } }}>
                   {category.description}
                 </Typography>
 
@@ -53,6 +58,7 @@ function ServiciosLanding() {
                     sx={{
                       mt: "auto",
                       borderRadius: "999px",
+                      width: { xs: "100%", sm: "auto" },
                       backgroundColor: "#B5838D",
                       "&:hover": { backgroundColor: "#6D6875" },
                     }}
@@ -63,7 +69,13 @@ function ServiciosLanding() {
                   <Button
                     variant="outlined"
                     disabled
-                    sx={{ mt: "auto", borderRadius: "999px", borderColor: "#B5838D", color: "#B5838D" }}
+                    sx={{
+                      mt: "auto",
+                      borderRadius: "999px",
+                      width: { xs: "100%", sm: "auto" },
+                      borderColor: "#B5838D",
+                      color: "#B5838D",
+                    }}
                   >
                     Proximamente
                   </Button>
