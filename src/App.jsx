@@ -12,17 +12,24 @@ import LogoutAdmin from "./admin/LogoutAdmin";
 import Testimonios from "./components/Testimonio";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Servicios from "./components/Servicios";
+import ServiciosLanding from "./servicios/ServiciosLanding";
+import ManicurePedicurePage from "./servicios/ManicurePedicurePage";
+
+const getRouteFromHash = (hashValue) => {
+  if (hashValue === "#admin") return "admin";
+  if (hashValue === "#/servicios/manicure-pedicure") return "manicure-route";
+  return "home";
+};
 
 function App() {
   const [role, setRole] = useState("cliente");
   const [user, setUser] = useState(null);
-  const [isAdminView, setIsAdminView] = useState(window.location.hash === "#admin");
+  const [route, setRoute] = useState(getRouteFromHash(window.location.hash));
   const [bookingOpen, setBookingOpen] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
-    const onHashChange = () => setIsAdminView(window.location.hash === "#admin");
+    const onHashChange = () => setRoute(getRouteFromHash(window.location.hash));
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
@@ -42,7 +49,7 @@ function App() {
     setUser(null);
   };
 
-  if (isAdminView) {
+  if (route === "admin") {
     return (
       <ThemeProvider theme={theme}>
         <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -67,6 +74,28 @@ function App() {
             </Button>
           </Paper>
         </Container>
+      </ThemeProvider>
+    );
+  }
+
+  if (route === "manicure-route") {
+    return (
+      <ThemeProvider theme={theme}>
+        <div className="App">
+          <Navbar />
+          <ManicurePedicurePage onBook={() => setBookingOpen(true)} />
+
+          <Box id="testimonios">
+            <Testimonios />
+          </Box>
+          <Footer />
+        </div>
+
+        <BookingPanel
+          open={bookingOpen}
+          onClose={() => setBookingOpen(false)}
+          onCreated={() => setRefreshKey((prev) => prev + 1)}
+        />
       </ThemeProvider>
     );
   }
@@ -102,7 +131,7 @@ function App() {
         </Box>
 
         <Box id="servicios">
-          <Servicios />
+          <ServiciosLanding />
         </Box>
 
         <Container id="reservar" maxWidth="lg" sx={{ py: 6 }}>

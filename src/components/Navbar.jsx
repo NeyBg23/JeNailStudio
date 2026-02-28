@@ -1,5 +1,19 @@
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 
+const goToSection = (sectionId) => {
+  if (window.location.hash === "#/servicios/manicure-pedicure" || window.location.hash === "#admin") {
+    window.location.hash = "";
+    window.setTimeout(() => {
+      const target = document.getElementById(sectionId);
+      target?.scrollIntoView({ behavior: "smooth" });
+    }, 60);
+    return;
+  }
+
+  const target = document.getElementById(sectionId);
+  target?.scrollIntoView({ behavior: "smooth" });
+};
+
 function Navbar() {
   return (
     <AppBar
@@ -19,24 +33,26 @@ function Navbar() {
             fontWeight: 800,
             color: "#6D6875",
             letterSpacing: "0.04em",
+            cursor: "pointer",
           }}
+          onClick={() => goToSection("inicio")}
         >
           JenNailStudio
         </Typography>
 
         <Box sx={{ display: "flex", gap: { xs: 0.5, md: 1.2 }, flexWrap: "wrap", justifyContent: "flex-end" }}>
-          <Button sx={{ color: "#6D6875" }} href="#inicio">
+          <Button sx={{ color: "#6D6875" }} onClick={() => goToSection("inicio")}>
             Inicio
           </Button>
-          <Button sx={{ color: "#6D6875" }} href="#servicios">
+          <Button sx={{ color: "#6D6875" }} onClick={() => goToSection("servicios")}>
             Servicios
           </Button>
-          <Button sx={{ color: "#6D6875" }} href="#testimonios">
+          <Button sx={{ color: "#6D6875" }} onClick={() => goToSection("testimonios")}>
             Testimonios
           </Button>
           <Button
             variant="contained"
-            href="#reservar"
+            onClick={() => goToSection("reservar")}
             sx={{
               backgroundColor: "#B5838D",
               borderRadius: "999px",

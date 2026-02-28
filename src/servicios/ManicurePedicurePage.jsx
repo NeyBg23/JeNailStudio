@@ -1,0 +1,103 @@
+import { Box, Button, Card, CardContent, CardMedia, Chip, Container, Grid, Typography } from "@mui/material";
+import { manicureServices } from "./data";
+
+function ManicurePedicurePage({ onBook }) {
+  return (
+    <Box sx={{ py: { xs: 4, md: 6 }, backgroundColor: "#fff7fa", minHeight: "70vh" }}>
+      <Container maxWidth="lg">
+        <Box
+          sx={{
+            mb: 3,
+            p: { xs: 2, md: 3 },
+            borderRadius: 3,
+            background: "linear-gradient(110deg, #fff0f5 0%, #fde2e4 70%)",
+            border: "1px solid rgba(109,104,117,0.2)",
+          }}
+        >
+          <Chip label="Vista dedicada" sx={{ mb: 1, backgroundColor: "#FFD6A5" }} />
+          <Typography variant="h4" sx={{ color: "#6D6875", fontWeight: 800 }}>
+            Manicure & Pedicure
+          </Typography>
+          <Typography sx={{ mt: 1, color: "#6D6875", maxWidth: 760 }}>
+            Aqui ves solo el catalogo de unas, de forma clara y responsive. Elige tu servicio y agenda desde el
+            panel premium.
+          </Typography>
+          <Box sx={{ mt: 2, display: "flex", gap: 1.2, flexWrap: "wrap" }}>
+            <Button variant="outlined" onClick={() => (window.location.hash = "#servicios")}>
+              Volver a categorias
+            </Button>
+            <Button
+              variant="contained"
+              onClick={onBook}
+              sx={{ backgroundColor: "#B5838D", "&:hover": { backgroundColor: "#6D6875" } }}
+            >
+              Agendar cita
+            </Button>
+          </Box>
+        </Box>
+
+        <Grid container spacing={3}>
+          {manicureServices.map((service) => (
+            <Grid item xs={12} sm={6} md={4} key={service.name}>
+              <Card
+                sx={{
+                  height: "100%",
+                  borderRadius: 3,
+                  overflow: "hidden",
+                  boxShadow: "0 10px 28px rgba(0,0,0,0.12)",
+                }}
+              >
+                <Box sx={{ position: "relative", overflow: "hidden" }}>
+                  <CardMedia
+                    component="img"
+                    image={service.image}
+                    alt={service.name}
+                    height="290"
+                    sx={{
+                      transition: "transform 400ms ease",
+                      ".MuiCard-root:hover &": { transform: "scale(1.06)" },
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      inset: 0,
+                      p: 1.5,
+                      display: "flex",
+                      alignItems: "flex-end",
+                      justifyContent: "space-between",
+                      background: "linear-gradient(180deg, rgba(0,0,0,0.00) 42%, rgba(0,0,0,0.62) 100%)",
+                    }}
+                  >
+                    <Typography sx={{ color: "#fff", fontWeight: 700 }}>{service.name}</Typography>
+                    <Chip
+                      label={`$${service.price.toLocaleString()}`}
+                      sx={{ backgroundColor: "rgba(255,214,221,0.95)", color: "#6D6875", fontWeight: 700 }}
+                    />
+                  </Box>
+                </Box>
+                <CardContent>
+                  <Typography sx={{ mb: 2, color: "#6D6875" }}>{service.details}</Typography>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    onClick={onBook}
+                    sx={{
+                      borderRadius: "999px",
+                      backgroundColor: "#B5838D",
+                      "&:hover": { backgroundColor: "#6D6875" },
+                    }}
+                  >
+                    Reservar este servicio
+                  </Button>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </Box>
+  );
+}
+
+export default ManicurePedicurePage;
