@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { db } from "../firebaseConfig";
 import { addDoc, collection, Timestamp } from "firebase/firestore";
 import {
@@ -49,7 +49,7 @@ const panelStyles = {
   border: "1px solid rgba(109,104,117,0.15)",
 };
 
-function BookingPanel({ open, onClose, onCreated }) {
+function BookingPanel({ open, onClose, onCreated, initialServiceKey = "Semipermanente" }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [form, setForm] = useState({
@@ -71,6 +71,14 @@ function BookingPanel({ open, onClose, onCreated }) {
 
   const total = selectedService.price;
   const setValue = (key, value) => setForm((prev) => ({ ...prev, [key]: value }));
+
+  useEffect(() => {
+    if (!open) return;
+    const exists = SERVICES.some((service) => service.key === initialServiceKey);
+    if (exists) {
+      setForm((prev) => ({ ...prev, tipoUna: initialServiceKey }));
+    }
+  }, [open, initialServiceKey]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();

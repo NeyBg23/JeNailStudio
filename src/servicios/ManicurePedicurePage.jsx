@@ -39,7 +39,7 @@ function ManicurePedicurePage({ onBook }) {
             </Button>
             <Button
               variant="contained"
-              onClick={onBook}
+              onClick={() => onBook("Semipermanente")}
               sx={{
                 backgroundColor: "#B5838D",
                 width: { xs: "100%", sm: "auto" },
@@ -96,7 +96,7 @@ function ManicurePedicurePage({ onBook }) {
                   <Button
                     fullWidth
                     variant="contained"
-                    onClick={onBook}
+                    onClick={() => onBook(service.bookingKey)}
                     sx={{
                       borderRadius: "999px",
                       backgroundColor: "#B5838D",

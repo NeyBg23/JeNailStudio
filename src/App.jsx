@@ -26,6 +26,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [route, setRoute] = useState(getRouteFromHash(window.location.hash));
   const [bookingOpen, setBookingOpen] = useState(false);
+  const [bookingServiceKey, setBookingServiceKey] = useState("Semipermanente");
   const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
@@ -47,6 +48,13 @@ function App() {
   const handleLogout = () => {
     setRole("cliente");
     setUser(null);
+  };
+
+  const openBooking = (serviceKey) => {
+    if (serviceKey) {
+      setBookingServiceKey(serviceKey);
+    }
+    setBookingOpen(true);
   };
 
   if (route === "admin") {
@@ -83,7 +91,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <div className="App">
           <Navbar />
-          <ManicurePedicurePage onBook={() => setBookingOpen(true)} />
+          <ManicurePedicurePage onBook={openBooking} />
 
           <Box id="testimonios" className="section-shell section-shell--soft">
             <Testimonios />
@@ -94,6 +102,7 @@ function App() {
         <BookingPanel
           open={bookingOpen}
           onClose={() => setBookingOpen(false)}
+          initialServiceKey={bookingServiceKey}
           onCreated={() => setRefreshKey((prev) => prev + 1)}
         />
       </ThemeProvider>
@@ -129,7 +138,7 @@ function App() {
                 backgroundColor: "#B5838D",
                 "&:hover": { backgroundColor: "#6D6875" },
               }}
-              onClick={() => setBookingOpen(true)}
+              onClick={() => openBooking("Semipermanente")}
             >
               Agendar tu cita
             </Button>
@@ -158,7 +167,7 @@ function App() {
                 backgroundColor: "#B5838D",
                 "&:hover": { backgroundColor: "#6D6875" },
               }}
-              onClick={() => setBookingOpen(true)}
+              onClick={() => openBooking("Semipermanente")}
             >
               Abrir panel de reserva
             </Button>
@@ -178,6 +187,7 @@ function App() {
       <BookingPanel
         open={bookingOpen}
         onClose={() => setBookingOpen(false)}
+        initialServiceKey={bookingServiceKey}
         onCreated={() => setRefreshKey((prev) => prev + 1)}
       />
     </ThemeProvider>

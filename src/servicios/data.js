@@ -43,18 +43,21 @@ export const serviceCategories = [
 
 export const manicureServices = [
   {
+    bookingKey: "Acrilicas",
     name: "Unas Acrilicas",
     price: 65000,
     image: "/images/UnasAcrilicas.png",
     details: "Extension y estructura de alta duracion con acabado elegante.",
   },
   {
+    bookingKey: "Gel",
     name: "Unas en Gel",
     price: 60000,
     image: "/images/unasGel.png",
     details: "Brillo natural, resistencia y estilo limpio para el dia a dia.",
   },
   {
+    bookingKey: "Semipermanente",
     name: "Semipermanente",
     price: 45000,
     image: "/images/unasSemipermantente.png",
