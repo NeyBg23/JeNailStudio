@@ -63,6 +63,82 @@
     linear-gradient(180deg, #fff6fa 0%, #fdf0f4 100%);
 }
 
+.premium-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 280ms ease, box-shadow 280ms ease, filter 280ms ease;
+  transform: translateZ(0);
+}
+
+.premium-card::before {
+  content: "";
+  position: absolute;
+  top: -25%;
+  left: -145%;
+  width: 42%;
+  height: 150%;
+  transform: rotate(18deg);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.48) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.premium-media-zoom {
+  transition: transform 520ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform: scale(1);
+}
+
+@keyframes premium-sweep {
+  0% {
+    left: -145%;
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.6;
+  }
+  100% {
+    left: 160%;
+    opacity: 0;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .premium-card:hover {
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 18px 40px rgba(109, 104, 117, 0.24);
+    filter: saturate(1.03);
+  }
+
+  .premium-card:hover::before {
+    animation: premium-sweep 950ms ease-out;
+  }
+
+  .premium-card:hover .premium-media-zoom {
+    transform: scale(1.08);
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .premium-card:active {
+    transform: scale(0.985);
+    box-shadow: 0 12px 28px rgba(109, 104, 117, 0.22);
+  }
+
+  .premium-card:active::before {
+    animation: premium-sweep 650ms ease-out;
+  }
+
+  .premium-card:active .premium-media-zoom {
+    transform: scale(1.04);
+  }
+}
+
 .brand-premium {
   position: relative;
   display: inline-block;
@@ -148,8 +224,11 @@
   }
 
   .brand-premium,
-  .brand-premium::after {
+  .brand-premium::after,
+  .premium-card,
+  .premium-media-zoom {
     animation: none;
+    transition: none;
   }
 }
 

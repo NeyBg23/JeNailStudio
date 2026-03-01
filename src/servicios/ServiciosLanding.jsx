@@ -35,6 +35,7 @@ function ServiciosLanding() {
             }}
           >
             <Card
+              className="premium-card"
               sx={{
                 height: 1,
                 borderRadius: 3,
@@ -47,6 +48,7 @@ function ServiciosLanding() {
               <Box sx={{ position: "relative" }}>
                 <CardMedia
                   component="img"
+                  className="premium-media-zoom"
                   image={category.image}
                   alt={category.title}
                   sx={{ height: { xs: 190, sm: 210, md: 220 } }}

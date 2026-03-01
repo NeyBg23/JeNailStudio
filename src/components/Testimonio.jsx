@@ -32,6 +32,7 @@ function Testimonios() {
         {testimonios.map((testimonio) => (
           <Grid item xs={12} sm={6} md={4} key={testimonio.nombre}>
             <Card
+              className="premium-card"
               sx={{
                 height: "100%",
                 borderRadius: 3,

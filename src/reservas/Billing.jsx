@@ -140,7 +140,7 @@ function Billing() {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Card sx={{ borderRadius: 3, backgroundColor: "#FFF0F5" }}>
+          <Card className="premium-card" sx={{ borderRadius: 3, backgroundColor: "#FFF0F5" }}>
             <CardContent>
               <Typography variant="subtitle1">Ingresos</Typography>
               <Typography variant="h4">${totalIngresos.toLocaleString()}</Typography>
@@ -149,7 +149,7 @@ function Billing() {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Card sx={{ borderRadius: 3, backgroundColor: "#FDE2E4" }}>
+          <Card className="premium-card" sx={{ borderRadius: 3, backgroundColor: "#FDE2E4" }}>
             <CardContent>
               <Typography variant="subtitle1">Reservas</Typography>
               <Typography variant="h4">{totalReservas}</Typography>
@@ -158,7 +158,7 @@ function Billing() {
         </Grid>
 
         <Grid item xs={12}>
-          <Card sx={{ borderRadius: 3 }}>
+          <Card className="premium-card" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Line data={lineData} />
             </CardContent>

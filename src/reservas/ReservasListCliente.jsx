@@ -185,6 +185,7 @@ function ReservasListCliente() {
         {reservasCliente.map((r) => (
           <Grid item xs={12} md={6} key={r.id}>
             <Card
+              className="premium-card"
               sx={{
                 backgroundColor: "rgba(255,255,255,0.65)",
                 border: "1px solid rgba(109,104,117,0.12)",

@@ -55,6 +55,7 @@ function ManicurePedicurePage({ onBook }) {
           {manicureServices.map((service) => (
             <Grid item xs={12} sm={6} md={4} key={service.name}>
               <Card
+                className="premium-card"
                 sx={{
                   height: "100%",
                   borderRadius: 3,
@@ -65,12 +66,11 @@ function ManicurePedicurePage({ onBook }) {
                 <Box sx={{ position: "relative", overflow: "hidden" }}>
                   <CardMedia
                     component="img"
+                    className="premium-media-zoom"
                     image={service.image}
                     alt={service.name}
                     sx={{
                       height: { xs: 260, sm: 280, md: 290 },
-                      transition: "transform 400ms ease",
-                      ".MuiCard-root:hover &": { transform: "scale(1.06)" },
                     }}
                   />
                   <Box
