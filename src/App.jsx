@@ -140,7 +140,8 @@ function App() {
           <ServiciosLanding />
         </Box>
 
-        <Container id="reservar" maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
+        <Box id="reservar" className="reserve-shell">
+          <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
           <Paper className="booking-banner" sx={{ p: { xs: 2, md: 4 }, borderRadius: 4 }}>
             <Typography variant="h4" sx={{ color: "#6D6875", fontWeight: 700, fontSize: { xs: "1.7rem", md: "2.125rem" } }}>
               Reserva Express
@@ -164,7 +165,8 @@ function App() {
           </Paper>
 
           <ReservasListCliente key={refreshKey} />
-        </Container>
+          </Container>
+        </Box>
 
         <Box id="testimonios">
           <Testimonios />

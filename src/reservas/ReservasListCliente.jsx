@@ -48,7 +48,16 @@ function ReservasListCliente() {
       : `Te faltan ${10 - totalServicios} servicios para tu beneficio VIP.`;
 
   return (
-    <Paper sx={{ mt: 4, p: 3, borderRadius: 3 }}>
+    <Paper
+      sx={{
+        mt: 4,
+        p: { xs: 2, md: 3 },
+        borderRadius: 3,
+        background: "linear-gradient(135deg, rgba(255,240,245,0.95) 0%, rgba(253,226,228,0.9) 100%)",
+        border: "1px solid rgba(109,104,117,0.15)",
+        boxShadow: "0 12px 28px rgba(109,104,117,0.12)",
+      }}
+    >
       <Typography variant="h5" sx={{ mb: 2, color: "#6D6875", fontWeight: 700 }}>
         Consulta tus reservas
       </Typography>
@@ -58,13 +67,25 @@ function ReservasListCliente() {
         value={telefonoFiltro}
         onChange={(event) => setTelefonoFiltro(event.target.value)}
         fullWidth
-        sx={{ mb: 2 }}
+        sx={{
+          mb: 2,
+          "& .MuiOutlinedInput-root": {
+            backgroundColor: "rgba(255,255,255,0.8)",
+            borderRadius: 2,
+          },
+        }}
       />
 
       <Grid container spacing={2}>
         {reservasCliente.map((r) => (
           <Grid item xs={12} md={6} key={r.id}>
-            <Card sx={{ backgroundColor: "#FAE3D9" }}>
+            <Card
+              sx={{
+                backgroundColor: "rgba(255,255,255,0.65)",
+                border: "1px solid rgba(109,104,117,0.12)",
+                boxShadow: "0 8px 18px rgba(109,104,117,0.08)",
+              }}
+            >
               <CardContent>
                 <Typography variant="h6">{r.tipoUna || "Servicio"}</Typography>
                 <Typography>Modelo: {r.modeloSeleccionado || "Sin modelo"}</Typography>
