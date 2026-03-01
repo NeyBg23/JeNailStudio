@@ -1,0 +1,55 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email == "jennailstudio23@gmail.com";
+    }
+
+    function validReservaCreate() {
+      return request.resource.data.keys().hasAll([
+        "clienteNombre",
+        "clienteTelefono",
+        "direccion",
+        "barrio",
+        "tipoUna",
+        "fechaHora",
+        "precioTotal",
+        "estado"
+      ])
+      && request.resource.data.clienteNombre is string
+      && request.resource.data.clienteTelefono is string
+      && request.resource.data.direccion is string
+      && request.resource.data.barrio is string
+      && request.resource.data.tipoUna is string
+      && request.resource.data.precioTotal is number
+      && request.resource.data.estado is string;
+    }
+
+    // Flujo actual:
+    // - Usuario final sin login: crea y consulta reservas.
+    // - Admin autenticado: puede leer/editar todo.
+    match /reservas/{reservaId} {
+      allow create: if validReservaCreate();
+      allow read: if true;
+      allow update, delete: if isAdmin();
+    }
+
+    match /modelos/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /servicios/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /clientes/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /fidelizacion/{docId} {
+      allow read, write: if isAdmin();
+    }
+  }
+}

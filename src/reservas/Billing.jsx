@@ -47,9 +47,13 @@ function Billing() {
 
   useEffect(() => {
     const fetchReservas = async () => {
-      const snapshot = await getDocs(collection(db, "reservas"));
-      const data = snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
-      setReservas(data);
+      try {
+        const snapshot = await getDocs(collection(db, "reservas"));
+        const data = snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+        setReservas(data);
+      } catch (error) {
+        console.error("Error al cargar billing:", error);
+      }
     };
     fetchReservas();
   }, []);
