@@ -19,6 +19,20 @@ import {
 
 const SERVICES = [
   {
+    key: "TradicionalCombo",
+    label: "Combo Tradicional Manos y Pies",
+    price: 35000,
+    time: "45 min",
+    image: "/images/unasTradicionales juego.png",
+  },
+  {
+    key: "TradicionalSimple",
+    label: "Tradicional Manos o Pies",
+    price: 20000,
+    time: "30 min",
+    image: "/images/unasTradicionales juego.png",
+  },
+  {
     key: "Acrilicas",
     label: "Acrilicas",
     price: 65000,

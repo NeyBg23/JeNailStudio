@@ -12,6 +12,8 @@ import {
   Select,
   MenuItem,
   Chip,
+  Button,
+  Box,
 } from "@mui/material";
 
 const toDate = (value) => {
@@ -23,6 +25,33 @@ const toDate = (value) => {
 };
 
 const ESTADOS = ["Agendado", "En curso", "Finalizado", "Cancelado"];
+
+const normalizePhone = (raw) => {
+  const clean = String(raw || "").replace(/\D/g, "");
+  if (!clean) return null;
+  if (clean.startsWith("57")) return clean;
+  return `57${clean}`;
+};
+
+const buildStatusMessage = (reserva) => {
+  const nombre = reserva.clienteNombre || "Cliente";
+  const servicio = reserva.tipoUna || reserva["tipoU\u00f1a"] || "tu servicio";
+  const estado = String(reserva.estado || "Agendado").toLowerCase().trim();
+
+  if (estado === "agendado") {
+    return `Hola ${nombre}, tu servicio de ${servicio} fue agendado con exito. En breve te compartimos detalles. Gracias por elegir JeNailStudio.`;
+  }
+  if (estado === "en curso") {
+    return `Hola ${nombre}, tu servicio de ${servicio} ya esta en curso. Gracias por confiar en JeNailStudio.`;
+  }
+  if (estado === "finalizado" || estado === "completado") {
+    return `Hola ${nombre}, tu servicio de ${servicio} fue finalizado con exito. Gracias por tu visita. Recuerda que al completar 10 servicios tendras un regalo especial de JeNailStudio.`;
+  }
+  if (estado === "cancelado") {
+    return `Hola ${nombre}, tu solicitud de ${servicio} fue cancelada. Si deseas reagendar, estamos atentas para ayudarte.`;
+  }
+  return `Hola ${nombre}, el estado de tu solicitud fue actualizado a ${reserva.estado}.`;
+};
 
 function ReservasListAdmin() {
   const [reservas, setReservas] = useState([]);
@@ -47,6 +76,13 @@ function ReservasListAdmin() {
     } catch (error) {
       console.error("Error al actualizar estado:", error);
     }
+  };
+
+  const abrirWhatsApp = (reserva) => {
+    const phone = normalizePhone(reserva.clienteTelefono || reserva.clineteTelefono);
+    if (!phone) return;
+    const mensaje = encodeURIComponent(buildStatusMessage(reserva));
+    window.open(`https://wa.me/${phone}?text=${mensaje}`, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -83,17 +119,27 @@ function ReservasListAdmin() {
                 <Chip label={reserva.estado || "Agendado"} size="small" />
               </TableCell>
               <TableCell>
-                <Select
-                  size="small"
-                  value={reserva.estado || "Agendado"}
-                  onChange={(event) => cambiarEstado(reserva.id, event.target.value)}
-                >
-                  {ESTADOS.map((estado) => (
-                    <MenuItem key={estado} value={estado}>
-                      {estado}
-                    </MenuItem>
-                  ))}
-                </Select>
+                <Box sx={{ display: "grid", gap: 1 }}>
+                  <Select
+                    size="small"
+                    value={reserva.estado || "Agendado"}
+                    onChange={(event) => cambiarEstado(reserva.id, event.target.value)}
+                  >
+                    {ESTADOS.map((estado) => (
+                      <MenuItem key={estado} value={estado}>
+                        {estado}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={() => abrirWhatsApp(reserva)}
+                    disabled={!normalizePhone(reserva.clienteTelefono || reserva.clineteTelefono)}
+                  >
+                    Enviar WhatsApp
+                  </Button>
+                </Box>
               </TableCell>
             </TableRow>
           ))}

@@ -25,13 +25,29 @@ service cloud.firestore {
       && request.resource.data.estado is string;
     }
 
+    function validClienteReservaUpdate() {
+      return resource.data.estado in ["Agendado", "En curso"]
+      && request.resource.data.estado == resource.data.estado
+      && request.resource.data.precioTotal == resource.data.precioTotal
+      && request.resource.data.clienteNombre == resource.data.clienteNombre
+      && (
+        ("clienteTelefono" in resource.data && request.resource.data.clienteTelefono == resource.data.clienteTelefono) ||
+        (!("clienteTelefono" in resource.data) && "clineteTelefono" in resource.data && request.resource.data.clineteTelefono == resource.data.clineteTelefono)
+      )
+      && request.resource.data.direccion is string
+      && request.resource.data.barrio is string
+      && request.resource.data.tipoUna is string
+      && request.resource.data.modeloSeleccionado is string;
+    }
+
     // Flujo actual:
     // - Usuario final sin login: crea y consulta reservas.
     // - Admin autenticado: puede leer/editar todo.
     match /reservas/{reservaId} {
       allow create: if validReservaCreate();
       allow read: if true;
-      allow update, delete: if isAdmin();
+      allow update: if isAdmin() || validClienteReservaUpdate();
+      allow delete: if isAdmin();
     }
 
     match /modelos/{docId} {
