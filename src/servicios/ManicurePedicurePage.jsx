@@ -3,7 +3,14 @@ import { manicureServices } from "./data";
 
 function ManicurePedicurePage({ onBook }) {
   return (
-    <Box sx={{ py: { xs: 4, md: 6 }, backgroundColor: "#fff7fa", minHeight: "70vh" }}>
+    <Box
+      sx={{
+        py: { xs: 4, md: 6 },
+        minHeight: "70vh",
+        background:
+          "radial-gradient(circle at 14% 10%, rgba(255, 214, 229, 0.28), transparent 34%), radial-gradient(circle at 88% 84%, rgba(253, 226, 228, 0.3), transparent 38%), linear-gradient(180deg, #fff6fa 0%, #fdf0f4 100%)",
+      }}
+    >
       <Container maxWidth="lg">
         <Box
           sx={{

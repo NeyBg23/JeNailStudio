@@ -85,7 +85,7 @@ function App() {
           <Navbar />
           <ManicurePedicurePage onBook={() => setBookingOpen(true)} />
 
-          <Box id="testimonios">
+          <Box id="testimonios" className="section-shell section-shell--soft">
             <Testimonios />
           </Box>
           <Footer />
@@ -136,7 +136,7 @@ function App() {
           </Box>
         </Box>
 
-        <Box id="servicios">
+        <Box id="servicios" className="section-shell section-shell--soft">
           <ServiciosLanding />
         </Box>
 
@@ -168,7 +168,7 @@ function App() {
           </Container>
         </Box>
 
-        <Box id="testimonios">
+        <Box id="testimonios" className="section-shell section-shell--soft">
           <Testimonios />
         </Box>
 

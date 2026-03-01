@@ -3,7 +3,7 @@ import { serviceCategories } from "./data";
 
 function ServiciosLanding() {
   return (
-    <Box sx={{ py: 8, px: 2, backgroundColor: "#FAE3D9" }}>
+    <Box sx={{ py: 8, px: 2 }}>
       <Typography variant="h4" align="center" sx={{ color: "#6D6875", fontWeight: 700, mb: 1 }}>
         Servicios Profesionales
       </Typography>
