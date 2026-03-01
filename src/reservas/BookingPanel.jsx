@@ -56,6 +56,7 @@ function BookingPanel({ open, onClose, onCreated, initialServiceKey = "Semiperma
     clienteNombre: "",
     clienteTelefono: "",
     direccion: "",
+    barrio: "",
     tipoUna: "Semipermanente",
     modeloSeleccionado: "",
     fechaHora: "",
@@ -87,8 +88,11 @@ function BookingPanel({ open, onClose, onCreated, initialServiceKey = "Semiperma
       await addDoc(collection(db, "reservas"), {
         clienteNombre: form.clienteNombre.trim(),
         clienteTelefono: form.clienteTelefono.trim(),
+        clineteTelefono: form.clienteTelefono.trim(),
         direccion: form.direccion.trim(),
+        barrio: form.barrio.trim(),
         tipoUna: form.tipoUna,
+        tipoU\u00f1a: form.tipoUna,
         modeloSeleccionado: form.modeloSeleccionado.trim(),
         fechaHora: form.fechaHora ? Timestamp.fromDate(new Date(form.fechaHora)) : Timestamp.now(),
         observaciones: form.observaciones.trim(),
@@ -102,6 +106,7 @@ function BookingPanel({ open, onClose, onCreated, initialServiceKey = "Semiperma
         clienteNombre: "",
         clienteTelefono: "",
         direccion: "",
+        barrio: "",
         tipoUna: "Semipermanente",
         modeloSeleccionado: "",
         fechaHora: "",
@@ -122,9 +127,17 @@ function BookingPanel({ open, onClose, onCreated, initialServiceKey = "Semiperma
         fullWidth
         maxWidth="md"
         fullScreen={isMobile}
+        scroll="paper"
         PaperProps={{ sx: { borderRadius: isMobile ? 0 : 2.5 } }}
       >
-        <DialogContent sx={{ ...panelStyles, p: { xs: 2, md: 3 } }}>
+        <DialogContent
+          sx={{
+            ...panelStyles,
+            p: { xs: 2, md: 3 },
+            overflowY: "auto",
+            maxHeight: isMobile ? "100dvh" : "calc(100dvh - 40px)",
+          }}
+        >
           <Grid container spacing={3}>
             <Grid item xs={12} md={5}>
               <Typography variant="h5" sx={{ fontWeight: 800, color: "#6D6875" }}>
@@ -177,8 +190,14 @@ function BookingPanel({ open, onClose, onCreated, initialServiceKey = "Semiperma
 
             <Grid item xs={12} md={7}>
               <form onSubmit={handleSubmit}>
-                <Grid container spacing={1.5}>
-                  <Grid item xs={12} md={6}>
+                <Box
+                  sx={{
+                    display: "grid",
+                    gap: 1.5,
+                    gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+                  }}
+                >
+                  <Box>
                     <TextField
                       label="Nombre"
                       value={form.clienteNombre}
@@ -186,8 +205,8 @@ function BookingPanel({ open, onClose, onCreated, initialServiceKey = "Semiperma
                       fullWidth
                       required
                     />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
+                  </Box>
+                  <Box>
                     <TextField
                       label="WhatsApp"
                       type="tel"
@@ -198,16 +217,24 @@ function BookingPanel({ open, onClose, onCreated, initialServiceKey = "Semiperma
                       fullWidth
                       required
                     />
-                  </Grid>
-                  <Grid item xs={12}>
+                  </Box>
+                  <Box sx={{ gridColumn: { xs: "auto", sm: "1 / -1" } }}>
                     <TextField
                       label="Direccion"
                       value={form.direccion}
                       onChange={(event) => setValue("direccion", event.target.value)}
                       fullWidth
                     />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
+                  </Box>
+                  <Box>
+                    <TextField
+                      label="Barrio"
+                      value={form.barrio}
+                      onChange={(event) => setValue("barrio", event.target.value)}
+                      fullWidth
+                    />
+                  </Box>
+                  <Box>
                     <TextField
                       select
                       label="Servicio"
@@ -221,16 +248,16 @@ function BookingPanel({ open, onClose, onCreated, initialServiceKey = "Semiperma
                         </MenuItem>
                       ))}
                     </TextField>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
+                  </Box>
+                  <Box>
                     <TextField
                       label="Modelo"
                       value={form.modeloSeleccionado}
                       onChange={(event) => setValue("modeloSeleccionado", event.target.value)}
                       fullWidth
                     />
-                  </Grid>
-                  <Grid item xs={12}>
+                  </Box>
+                  <Box>
                     <TextField
                       label="Fecha y hora"
                       type="datetime-local"
@@ -240,8 +267,8 @@ function BookingPanel({ open, onClose, onCreated, initialServiceKey = "Semiperma
                       required
                       InputLabelProps={{ shrink: true }}
                     />
-                  </Grid>
-                  <Grid item xs={12}>
+                  </Box>
+                  <Box>
                     <TextField
                       label="Notas del servicio"
                       value={form.observaciones}
@@ -250,16 +277,22 @@ function BookingPanel({ open, onClose, onCreated, initialServiceKey = "Semiperma
                       multiline
                       minRows={2}
                     />
-                  </Grid>
-                </Grid>
+                  </Box>
+                </Box>
 
                 <Box
                   sx={{
-                    mt: 2,
+                    mt: 2.2,
+                    pt: 1.2,
+                    pb: isMobile ? 1 : 0,
                     display: "flex",
                     gap: 1.2,
                     justifyContent: "flex-end",
                     flexDirection: { xs: "column-reverse", sm: "row" },
+                    position: "sticky",
+                    bottom: 0,
+                    background:
+                      "linear-gradient(180deg, rgba(255,240,245,0) 0%, rgba(255,240,245,0.96) 38%, rgba(255,240,245,0.98) 100%)",
                   }}
                 >
                   <Button onClick={onClose}>Cancelar</Button>

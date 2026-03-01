@@ -36,7 +36,7 @@ function ReservasListCliente() {
   const reservasCliente = useMemo(() => {
     if (!telefonoFiltro.trim()) return [];
     return reservas
-      .filter((r) => (r.clienteTelefono || "").includes(telefonoFiltro.trim()))
+      .filter((r) => ((r.clienteTelefono || r.clineteTelefono || "").includes(telefonoFiltro.trim())))
       .sort((a, b) => (toDate(b.fechaHora) || 0) - (toDate(a.fechaHora) || 0));
   }, [reservas, telefonoFiltro]);
 
@@ -88,6 +88,7 @@ function ReservasListCliente() {
             >
               <CardContent>
                 <Typography variant="h6">{r.tipoUna || "Servicio"}</Typography>
+                <Typography>Barrio: {r.barrio || "Sin barrio"}</Typography>
                 <Typography>Modelo: {r.modeloSeleccionado || "Sin modelo"}</Typography>
                 <Typography>Fecha: {toDate(r.fechaHora)?.toLocaleString() || "Pendiente"}</Typography>
                 <Typography>Estado: {r.estado || "Agendado"}</Typography>

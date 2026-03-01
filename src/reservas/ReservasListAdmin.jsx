@@ -56,6 +56,7 @@ function ReservasListAdmin() {
           <TableRow>
             <TableCell>Cliente</TableCell>
             <TableCell>Telefono</TableCell>
+            <TableCell>Barrio</TableCell>
             <TableCell>Servicio</TableCell>
             <TableCell>Modelo</TableCell>
             <TableCell>Fecha</TableCell>
@@ -68,8 +69,9 @@ function ReservasListAdmin() {
           {reservas.map((reserva) => (
             <TableRow key={reserva.id}>
               <TableCell>{reserva.clienteNombre || "-"}</TableCell>
-              <TableCell>{reserva.clienteTelefono || "-"}</TableCell>
-              <TableCell>{reserva.tipoUna || reserva.tipoUña || "-"}</TableCell>
+              <TableCell>{reserva.clienteTelefono || reserva.clineteTelefono || "-"}</TableCell>
+              <TableCell>{reserva.barrio || "-"}</TableCell>
+              <TableCell>{reserva.tipoUna || reserva["tipoU\u00f1a"] || "-"}</TableCell>
               <TableCell>{reserva.modeloSeleccionado || "-"}</TableCell>
               <TableCell>{toDate(reserva.fechaHora || reserva.fecha)?.toLocaleString() || "-"}</TableCell>
               <TableCell>${Number(reserva.precioTotal || 0).toLocaleString()}</TableCell>

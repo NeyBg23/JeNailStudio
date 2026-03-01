@@ -87,7 +87,7 @@ function Billing() {
   const clientesFrecuentes = useMemo(() => {
     const counter = {};
     reservas.forEach((r) => {
-      const key = r.clienteTelefono || r.clienteNombre || "Cliente";
+      const key = r.clienteTelefono || r.clineteTelefono || r.clienteNombre || "Cliente";
       counter[key] = (counter[key] || 0) + 1;
     });
     return counter;
@@ -179,13 +179,13 @@ function Billing() {
               </TableHead>
               <TableBody>
                 {filtradas.map((r) => {
-                  const key = r.clienteTelefono || r.clienteNombre || "Cliente";
+                  const key = r.clienteTelefono || r.clineteTelefono || r.clienteNombre || "Cliente";
                   const servicios = clientesFrecuentes[key] || 0;
                   const vip = servicios >= 10;
                   return (
                     <TableRow key={r.id}>
                       <TableCell>{r.clienteNombre || "-"}</TableCell>
-                      <TableCell>{r.tipoUna || r.tipoUña || "-"}</TableCell>
+                      <TableCell>{r.tipoUna || r["tipoU\u00f1a"] || "-"}</TableCell>
                       <TableCell>{toDate(r.fechaHora || r.fecha)?.toLocaleString() || "-"}</TableCell>
                       <TableCell>{r.estado || "-"}</TableCell>
                       <TableCell>${Number(r.precioTotal || 0).toLocaleString()}</TableCell>
