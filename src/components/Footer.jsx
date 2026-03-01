@@ -25,8 +25,12 @@ function Footer() {
           }}
         >
           <Box>
-            <Typography variant="h5" sx={{ fontWeight: 800, letterSpacing: "0.03em" }}>
-              JenNailStudio
+            <Typography
+              variant="h5"
+              className="brand-premium brand-premium--footer"
+              sx={{ fontWeight: 800, letterSpacing: "0.03em" }}
+            >
+              JeNailStudio
             </Typography>
             <Typography sx={{ mt: 1.2, opacity: 0.9 }}>
               Elegancia, detalle y estilo en cada cita. Agenda facil y confirma tu servicio por WhatsApp.
@@ -78,7 +82,7 @@ function Footer() {
           }}
         >
           <Typography variant="body2" sx={{ opacity: 0.85 }}>
-            © {new Date().getFullYear()} JenNailStudio. Todos los derechos reservados.
+            © {new Date().getFullYear()} JeNailStudio. Todos los derechos reservados.
           </Typography>
           <Typography variant="body2" sx={{ opacity: 0.85 }}>
             Desarrollado por{" "}

@@ -110,9 +110,10 @@ function App() {
           <Box className="hero-content">
             <Typography
               variant="h2"
+              className="brand-premium brand-premium--hero"
               sx={{ fontWeight: "bold", mb: 2, fontSize: { xs: "2rem", sm: "2.6rem", md: "3.4rem" } }}
             >
-              JenNailStudio
+              JeNailStudio
             </Typography>
             <Typography variant="h5" sx={{ mb: 4, fontSize: { xs: "1rem", sm: "1.2rem", md: "1.5rem" } }}>
               Tu estilo, tu momento, tu espacio de belleza en casa

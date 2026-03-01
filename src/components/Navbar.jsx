@@ -55,6 +55,7 @@ function Navbar() {
       <Toolbar sx={{ minHeight: 72, display: "flex", justifyContent: "space-between", gap: 1 }}>
         <Typography
           variant="h6"
+          className="brand-premium brand-premium--nav"
           sx={{
             fontWeight: 800,
             color: "#6D6875",
@@ -63,7 +64,7 @@ function Navbar() {
           }}
           onClick={() => handleNav("inicio")}
         >
-          JenNailStudio
+          JeNailStudio
         </Typography>
 
         <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1.2, alignItems: "center" }}>
